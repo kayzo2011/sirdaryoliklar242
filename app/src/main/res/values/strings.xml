@@ -1,0 +1,5 @@
+<!-- PATH: app/src/main/res/values/strings.xml -->
+<resources>
+    <string name="app_name">Jarvis</string>
+    <string name="a11y_desc">Jarvis boshqa ilovalarda bosish va yozish uchun</string>
+</resources>
