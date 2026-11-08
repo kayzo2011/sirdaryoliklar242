@@ -45,8 +45,7 @@ class MainActivity : Activity() {
     }
 
     private fun mainUi(root: LinearLayout) {
-        val claude = et(root, "Claude API kaliti", true)
-        val porc = et(root, "Picovoice AccessKey", true)
+        val key = et(root, "Groq API kaliti (gsk_...)", true)
         val pin = et(root, "Yangi PIN (2-daraja himoyani ochish uchun)", true)
         val phrase = et(root, "Maxfiy ibora (og'ir vaziyat uchun)")
         val speaker = et(root, "Bluetooth kolonka nomi")
@@ -57,7 +56,7 @@ class MainActivity : Activity() {
 
         btn(root, "Saqlash") {
             fun put(k: String, v: String) { if (v.isNotBlank()) store.putS(k, v.trim()) }
-            put("claude_key", claude.text.toString()); put("porcupine_key", porc.text.toString())
+            put("claude_key", key.text.toString())
             put("watched", watched.text.toString()); put("limit_min", limit.text.toString())
             if (pin.text.isNotBlank()) store.setPin(pin.text.toString())
             if (phrase.text.isNotBlank()) store.duressPhrase = phrase.text.toString()
@@ -66,7 +65,7 @@ class MainActivity : Activity() {
                 store.putS("wifi_ssid", ssid.text.toString().trim())
                 store.saveWifi(ssid.text.toString().trim(), wpass.text.toString())
             }
-            listOf(claude, porc, pin, wpass).forEach { it.setText("") }
+            listOf(key, pin, wpass).forEach { it.setText("") }
             toast("Saqlandi")
         }
 
@@ -95,7 +94,12 @@ class MainActivity : Activity() {
 
         btn(root, "Jarvisni ishga tushirish") {
             ContextCompat.startForegroundService(this, Intent(this, JarvisService::class.java))
-            toast("Jarvis ishga tushdi")
+            toast("Jarvis ishga tushdi: bildirishnomada «Tinglash» tugmasi bor")
+        }
+
+        btn(root, "TINGLASH (buyruq berish)") {
+            ContextCompat.startForegroundService(this,
+                Intent(this, JarvisService::class.java).setAction(JarvisService.ACTION_LISTEN))
         }
 
         val rep = store.getS("last_report")
